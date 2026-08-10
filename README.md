@@ -1,11 +1,11 @@
-# 32Co — AI Research Take-Home: Instruction-Conditioned Treatment Planning
+# 01Health - AI Research Task: Instruction-Conditioned Treatment Planning
 
-> **Timeline:** 7 days from receiving this pack — sized so ideas can marinate, training
+> **Timeline:** 7 days from receiving this pack - sized so ideas can marinate, training
 > (if any) can run overnight, and the task fits around your job. Stopping early with a
 > sharp writeup beats pushing on.
 
-This is the only document you need — the task, the data, the output format, and how we
-score, in one read.
+This is the only document you need - the task, the data, the formats, and what to send,
+in one read.
 
 **Start in five minutes.** Python ≥ 3.10 and numpy are the only requirements. From the
 pack root:
@@ -18,14 +18,14 @@ python starter/score.py --plans submissions/dev --split train           # scored
 
 Replace `plan_case()` in `starter/example_predict.py` with your approach and iterate.
 (Optional: `starter/parser.py` has an LLM parsing path behind `pip install anthropic` + an
-API key — never required.)
+API key - never required.)
 
 ## 1. The problem
 
-32Co makes clear-aligner treatment accessible through general dentists, supported by
+01Health makes clear-aligner treatment accessible through general dentists, supported by
 orthodontic specialists. For every case a dentist submits a 3D scan of the patient's teeth
 plus a free-text prescription, and a specialist designs the plan: where every tooth should
-end up. That design step is expert, slow, and what this role will help automate — safely,
+end up. That design step is expert, slow, and what this role will help automate - safely,
 with a clinician always approving the output.
 
 Your task is a scoped slice of it. Build a model or pipeline:
@@ -36,50 +36,50 @@ predict(arch_geometry, instruction_text) → per-tooth rigid movements
 
 Two properties are load-bearing:
 
-1. **Teeth are rigid.** You output per-tooth rigid transforms — never deformed geometry.
+1. **Teeth are rigid.** You output per-tooth rigid transforms - never deformed geometry.
 2. **The text must matter.** The same mouth under a different instruction must produce a
    materially, *correctly* different plan. A model that ignores the text has failed the
-   task regardless of its geometric accuracy — and the evaluation is built to expose this.
+   task regardless of its geometric accuracy - and the evaluation is built to expose this.
 
 **Building or training a neural model is optional.** Any approach that produces plans is in
 bounds: learned, geometric, LLM-in-the-loop, hybrid. Public datasets and pretrained weights
 are allowed if documented; ortho-specific commercial tools are not. Babysitting training
-runs buys nothing here — we are hiring for how you think about **3D + text multimodal
+runs buys nothing here - we are hiring for how you think about **3D + text multimodal
 modeling**, and the deepest part of your submission is the *proposed architecture* in your
 writeup, which may go well beyond whatever you had time to prototype.
 
 ## 2. The data
 
-Anonymized, downsampled derivatives of real cases (do not redistribute; delete after the
+Anonymised, downsampled derivatives of real cases (do not redistribute; delete after the
 process).
 
 ```
 train/  (50 cases)   geometry + the real dentist instruction + the designer's real plan
-eval/   (25 cases)   geometry + instructions ONLY — you predict the rest
+eval/   (25 cases)   geometry + instructions ONLY - you predict the rest
 starter/             loader, instruction parser, the public scorer, and example_predict.py
-                     (a complete valid do-nothing submission — replace one function)
+                     (a complete valid do-nothing submission - replace one function)
 ```
 
 Per case:
 
 | file | contents |
 |---|---|
-| `points.npz` | labeled 3D point clouds — arrays keyed `t<FDI>`, 1024 points per tooth, float32, mm, scan frame (subsample freely) |
-| `teeth.json` | per tooth: `centroid` [x,y,z] and `frame_q` [x,y,z,w] — the local coordinate frame, provided so you don't spend budget on geometry preprocessing |
+| `points.npz` | labeled 3D point clouds - arrays keyed `t<FDI>`, 1024 points per tooth, float32, mm, scan frame (subsample freely) |
+| `teeth.json` | per tooth: `centroid` [x,y,z] and `frame_q` [x,y,z,w] - the local coordinate frame, provided so you don't spend budget on geometry preprocessing |
 | `instruction.txt` | (train) the real dentist's free-text request |
 | `gold_transforms.json` | (train) the designer's real plan: `{"transforms": {"<fdi>": {"t_mm": [3], "q": [4]}}}` |
-| `instructions.json` | (eval) `[{"id": "i0", "text": "..."}, ...]` — **submit a plan for every entry** |
+| `instructions.json` | (eval) `[{"id": "i0", "text": "..."}, ...]` - the eval battery; one plan per entry if you send plans |
 | `meta.json` | case id, arch type, complexity band |
 
-And the starter kit — five flat Python files, numpy-only:
+And the starter kit - five flat Python files, numpy-only:
 
 | file | what it is |
 |---|---|
 | `starter/contract.py` | case/plan loading and saving, quaternion helpers |
-| `starter/parser.py` | a keyword instruction parser — a starting point, improve or replace it freely |
+| `starter/parser.py` | a keyword instruction parser - a starting point, improve or replace it freely |
 | `starter/metrics.py` | the scorer; the judge runs this same code against the hidden eval gold |
 | `starter/score.py` | self-eval CLI: `python starter/score.py --plans <dir> --split train` |
-| `starter/example_predict.py` | a complete, valid (do-nothing) submission — replace `plan_case()` |
+| `starter/example_predict.py` | a complete, valid (do-nothing) submission - replace `plan_case()` |
 
 **Conventions** (everything you need; the starter kit implements all of it):
 
@@ -88,7 +88,7 @@ And the starter kit — five flat Python files, numpy-only:
   where `c` is the tooth's start centroid. Identity transform = tooth does not move.
 - FDI numbering, 28 teeth per case (no third molars): upper `17…27`, lower `47…37`.
   Quadrants: 1 upper-right, 2 upper-left, 3 lower-left, 4 lower-right (patient's view).
-  Unit digit: 1–2 incisors, 3 canine, 4–5 premolars, 6–7 molars — "1.6" = FDI 16.
+  Unit digit: 1–2 incisors, 3 canine, 4–5 premolars, 6–7 molars - "1.6" = FDI 16.
   Anterior = unit digits 1–3, posterior = 4–7.
 - `frame_q` rotates a scan-frame vector INTO the tooth frame (`v_tooth = R(frame_q) @
   v_scan`). Tooth axes: x mesiodistal (toward distal), y buccolingual (outward),
@@ -97,38 +97,38 @@ And the starter kit — five flat Python files, numpy-only:
 Load a case with the starter kit: `from contract import load_case`.
 
 **Provenance, honestly stated.** The instruction is the dentist's prescription, written
-when the case was submitted — after seeing the scan, before any plan existed. The gold is
+when the case was submitted - after seeing the scan, before any plan existed. The gold is
 the orthodontic specialist's *planned* final tooth positions (dentist-approved in most
 cases), not the clinical outcome. Plans sometimes went through revision rounds whose
-feedback isn't in the instruction text — so treat the text as a strong but incomplete
+feedback isn't in the instruction text - so treat the text as a strong but incomplete
 explanation of the gold. This is real clinical data, noise included; reasoning well about
 that noise is part of the task.
 
 ## 3. The instructions
 
 Free text, varying along four deliberate axes. You don't need to parse them into this
-taxonomy — but your *outputs* must respond to these axes, because the gold plans do:
+taxonomy - but your *outputs* must respond to these axes, because the gold plans do:
 
-1. **Protection** — teeth that must not move ("do not move 1.6, 2.6", "avoid moving the
+1. **Protection** - teeth that must not move ("do not move 1.6, 2.6", "avoid moving the
    molars"). A protected tooth's correct transform is the identity.
-2. **Scope** — which arch/region the work applies to ("lower arch only" ⇒ every upper
+2. **Scope** - which arch/region the work applies to ("lower arch only" ⇒ every upper
    tooth stays put; "front teeth" ⇒ incisors + canines).
-3. **Objective trade-off** — speed ↔ safety ↔ aesthetics.
-4. **Structure** — refinements, stage budgets (only relevant to the staging extension).
+3. **Objective trade-off** - speed ↔ safety ↔ aesthetics.
+4. **Structure** - refinements, stage budgets (only relevant to the staging extension).
 
 Example, same style as the pack: *"Align and level the lower arch only; leave the upper
 arch completely untouched. Resolve crowding primarily by proclination rather than IPR."*
 
 Each eval case carries **multiple instructions**, including pairs that contradict each
 other on these axes. We score whether your plans *differ between instructions the way the
-gold plans differ* — in magnitude and direction — plus shuffled-text controls. Run your own
-**text-shuffle control** — feed your system the instructions shuffled across cases (works
-for any approach, learned or not) — and report both numbers in your writeup; we compare
-them to ours.
+gold plans differ* - in magnitude and direction - plus shuffled-text controls. Run your own
+**text-shuffle control** - feed your system the instructions shuffled across cases (works
+for any approach, learned or not) - and report both numbers in your writeup.
 
-## 4. What you produce
+## 4. The plan format
 
-One plan file per (case, instruction): `plans/<case_id>__<instruction_id>.json`
+If you send plans (suggested - see Deliverables): one file per (case, instruction),
+`plans/<case_id>__<instruction_id>.json`
 
 ```json
 {
@@ -145,85 +145,45 @@ One plan file per (case, instruction): `plans/<case_id>__<instruction_id>.json`
 ```
 
 Every tooth in the case must appear (identity transform for teeth you don't move).
-`starter/example_predict.py` already emits exactly this for the whole eval set — replace
+`starter/example_predict.py` already emits exactly this for the whole eval set - replace
 its `plan_case()` with your model and the format is guaranteed right. Self-evaluate any
 time: `python starter/score.py --plans <dir> --split train` (train cases carry their gold;
 the scorer is the same metric code we run).
 
-**The shape of the task** — the two things every submission does:
-
-1. **Setup prediction** — per-tooth rigid movements for the 25 eval arches.
-2. **Text conditioning** — the instruction demonstrably steers the output, shown by your
-   shuffle control (§3).
-
 If the core is done and you have appetite, two open extensions: **staging** (decompose
-into per-stage transforms, caps 0.25 mm / 2.0° per stage — up to 0.30/2.5 for "speed",
-down to 0.15/1.0 for "safety" — collision-free at every stage, `"stages": [...]` added to
-the plan JSON) and **multi-plan** (2–3 distinct valid plans per case+instruction).
-Unfinished extensions cost nothing.
+movements into clinically-sized per-stage steps, collision-free at every stage) and
+**multi-plan** (2–3 distinct valid plans for the same case and instruction). Unfinished
+extensions cost nothing.
 
 ## 5. Deliverables
 
-Two things — **your writeup and your plan files**. We are not asking for your code, your
-weights, or your repo; what you built stays yours.
+One thing is required - **your writeup**. Plan files are suggested, and code is optional.
 
-1. **The writeup** — the primary deliverable. No required format or length: most good
-   ones end up somewhere around 2–4 pages, but write what the thinking needs. These are
-   the questions we'll be reading for:
-   - How does your prototype turn (geometry, text) into plans — and how does the text
-     actually steer the output? (A diagram earns its space.)
-   - What do your shuffle-control numbers show — and how much of your sensitivity comes
+1. **The writeup (required)** - no required format or length: most good ones end up
+   somewhere around 2–4 pages, but write what the thinking needs. These are the questions
+   we'll be reading for:
+   - Describe your model architecture and why you chose it.
+   - How does your prototype turn (geometry, text) into plans - and how does the text
+     actually steer the output?
+   - What do your shuffle-control numbers show - and how much of your sensitivity comes
      from explicit parsing/rules versus learned behaviour, if both are present?
-   - What did you try that didn't work?
-   - **The part we weight most — what would you build as the production system**, given
-     real scale: thousands of cases with dentist text, per-step staged geometry, revision
-     histories with exact numeric corrections. How do 3D geometry, free text and numeric
-     supervision meet inside it; what does it output and why that parameterization; what
-     is learned versus engineered; which data would you exploit first; and how would you
-     evaluate it to clinical trust? Alternatives you considered and rejected count as
-     much as the choice you made — this may go far beyond your prototype, and we grade
-     the reasoning.
+   - What further data could be introduced to make a model perform better and why?
+   - If given unlimited time and budget, what would you build differently and why?
 
-   Honesty is scored throughout: a clear account of a limitation beats a glossed-over one.
-2. **`plans/`** — plan JSON for all 25 eval cases × every listed instruction. Output
-   files, not code — they let us score your ideas objectively instead of just reading prose.
+2. **`plans/` (suggested)** - plan JSON for the 25 eval cases × every listed instruction
+   (`starter/example_predict.py` emits the exact format). Not required, but well worth
+   sending: plans let us score your ideas objectively alongside the writeup, and they give
+   the follow-up conversation real material.
 
-Optional and welcome: your code or weights, if you're happy to share — reproducibility is
-a plus, never a requirement.
+3. **Code or weights (optional)** - only if you're happy to share; reproducibility is a
+   plus, never a requirement. What you built stays yours.
 
-## 6. How we score
-
-We read your writeup and score your `plans/` with the same metrics as your `starter/`
-scorer, loading them into our 3D viewer next to the human designers' plans.
-
-| Dimension | Weight |
-|---|---|
-| Multimodal architecture & reasoning — the writeup: how text enters your system, and the proposed production architecture | 40% |
-| Instruction sensitivity — measured on your plans: counterfactual + shuffle controls | 25% |
-| Geometric accuracy vs the designers' plans | 10% |
-| Constraints — rigidity, collisions, held teeth staying held | 10% |
-| Communication — clarity, honest evaluation | 15% |
-
-**How to read the measured part.** We do not expect trained-model accuracy from a
-take-home — nobody, including us, meaningfully beats the do-nothing floor on geometric
-accuracy in one. Endpoint numbers are read against that floor (compute it yourself: score
-the unmodified `example_predict.py` output on train). **Sensitivity is where submissions
-differentiate**, and it needs no training — it measures whether your outputs follow the
-text, whatever produces them.
-
-What impresses us: reasoned choices over exhaustive ones. A small system with a well-argued
-conditioning mechanism and an honest shuffle control outscores a large model with neither.
-
-## 7. Practical
+## 6. Practical
 
 - **Compute:** a laptop CPU is enough for everything here (a small learned model on this
-  pack trains in minutes, and non-learned pipelines need none). If you train, short runs
-  are plenty — there's no prize for tuning.
-- **Questions:** welcome, and normal — josh.kaura@32co.com. We answer questions about the
-  contract and data, not approach.
-- **Submission:** writeup + `plans/` (zip or link) to josh.kaura@32co.com, within 7 days
-  of receiving this pack. We confirm receipt within one business day. Afterwards: a
-  technical conversation about your prototype and how you'd evolve it with more of our
-  data.
+  pack trains in minutes, and non-learned pipelines need none).
+- **Questions:** email louisa.rumble@01health.ai
+- **Submission:** your writeup (plus `plans/` and anything else you'd like us to see - zip
+  or link) to louisa.rumble@01health.ai, within 7 days of receiving this pack. 
 
-Good luck — we're looking forward to seeing how you think.
+Good luck - we're looking forward to seeing how you think.
