@@ -1,10 +1,8 @@
 # 32Co — AI Research Take-Home: Instruction-Conditioned Treatment Planning
 
-> **Timeline:** 7 days from receiving this pack · **Expected effort: ~10–12 hours.**
-> The week is there so ideas can marinate, training (if any) can run overnight, and the
-> task fits around your job — not so more features accumulate. A rough note of where your
-> hours went helps us read your scoping choices; stopping early with a sharp writeup beats
-> pushing on.
+> **Timeline:** 7 days from receiving this pack — sized so ideas can marinate, training
+> (if any) can run overnight, and the task fits around your job. Stopping early with a
+> sharp writeup beats pushing on.
 
 This is the only document you need — the task, the data, the output format, and how we
 score, in one read.
@@ -45,10 +43,10 @@ Two properties are load-bearing:
 
 **Building or training a neural model is optional.** Any approach that produces plans is in
 bounds: learned, geometric, LLM-in-the-loop, hybrid. Public datasets and pretrained weights
-are allowed if documented; ortho-specific commercial tools are not. Hours spent babysitting
-training runs buy nothing here — we are hiring for how you think about **3D + text
-multimodal modeling**, and the deepest part of your submission is the *proposed
-architecture* in your writeup, which may go well beyond whatever you had time to prototype.
+are allowed if documented; ortho-specific commercial tools are not. Babysitting training
+runs buys nothing here — we are hiring for how you think about **3D + text multimodal
+modeling**, and the deepest part of your submission is the *proposed architecture* in your
+writeup, which may go well beyond whatever you had time to prototype.
 
 ## 2. The data
 
@@ -73,8 +71,7 @@ Per case:
 | `instructions.json` | (eval) `[{"id": "i0", "text": "..."}, ...]` — **submit a plan for every entry** |
 | `meta.json` | case id, arch type, complexity band |
 
-And the starter kit — five flat Python files, numpy-only, regenerated from our repo at
-pack build so they cannot drift from the code that judges you:
+And the starter kit — five flat Python files, numpy-only:
 
 | file | what it is |
 |---|---|
@@ -117,7 +114,7 @@ taxonomy — but your *outputs* must respond to these axes, because the gold pla
 2. **Scope** — which arch/region the work applies to ("lower arch only" ⇒ every upper
    tooth stays put; "front teeth" ⇒ incisors + canines).
 3. **Objective trade-off** — speed ↔ safety ↔ aesthetics.
-4. **Structure** — refinements, stage budgets (staging stretch only).
+4. **Structure** — refinements, stage budgets (only relevant to the staging extension).
 
 Example, same style as the pack: *"Align and level the lower arch only; leave the upper
 arch completely untouched. Resolve crowding primarily by proclination rather than IPR."*
@@ -177,7 +174,7 @@ weights, or your repo; what you built stays yours.
      actually steer the output? (A diagram earns its space.)
    - What do your shuffle-control numbers show — and how much of your sensitivity comes
      from explicit parsing/rules versus learned behaviour, if both are present?
-   - What did you try that didn't work? Roughly where did the hours go?
+   - What did you try that didn't work?
    - **The part we weight most — what would you build as the production system**, given
      real scale: thousands of cases with dentist text, per-step staged geometry, revision
      histories with exact numeric corrections. How do 3D geometry, free text and numeric
@@ -196,9 +193,8 @@ a plus, never a requirement.
 
 ## 6. How we score
 
-We read your writeup and run a frozen harness over your `plans/` (same metric definitions
-as your `starter/` scorer), loading them into our 3D viewer next to the human designers'
-plans.
+We read your writeup and score your `plans/` with the same metrics as your `starter/`
+scorer, loading them into our 3D viewer next to the human designers' plans.
 
 | Dimension | Weight |
 |---|---|
@@ -208,10 +204,10 @@ plans.
 | Constraints — rigidity, collisions, held teeth staying held | 10% |
 | Communication — clarity, honest evaluation | 15% |
 
-**How to read the measured part.** We do not expect trained-model accuracy in 10–12 hours —
-nobody, including us, meaningfully beats the do-nothing floor on geometric accuracy in that
-time. Endpoint numbers are read against that floor (compute it yourself: score the
-unmodified `example_predict.py` output on train). **Sensitivity is where submissions
+**How to read the measured part.** We do not expect trained-model accuracy from a
+take-home — nobody, including us, meaningfully beats the do-nothing floor on geometric
+accuracy in one. Endpoint numbers are read against that floor (compute it yourself: score
+the unmodified `example_predict.py` output on train). **Sensitivity is where submissions
 differentiate**, and it needs no training — it measures whether your outputs follow the
 text, whatever produces them.
 
@@ -223,13 +219,11 @@ conditioning mechanism and an honest shuffle control outscores a large model wit
 - **Compute:** a laptop CPU is enough for everything here (a small learned model on this
   pack trains in minutes, and non-learned pipelines need none). If you train, short runs
   are plenty — there's no prize for tuning.
-- **If a rough shape of the hours helps:** ~1h getting familiar · ~4–5h making your
-  prototype follow instructions · ~1h the shuffle control · the rest on the writeup.
-  Spend them however actually suits your approach.
-- **Questions:** welcome, and normal — [CONTACT EMAIL]. We answer questions about the
+- **Questions:** welcome, and normal — josh.kaura@32co.com. We answer questions about the
   contract and data, not approach.
-- **Submission:** writeup + `plans/` (zip or link) to [CONTACT EMAIL] by [DEADLINE]. We
-  confirm receipt within one business day. Afterwards: a technical conversation about your
-  prototype and how you'd evolve it with more of our data.
+- **Submission:** writeup + `plans/` (zip or link) to josh.kaura@32co.com, within 7 days
+  of receiving this pack. We confirm receipt within one business day. Afterwards: a
+  technical conversation about your prototype and how you'd evolve it with more of our
+  data.
 
 Good luck — we're looking forward to seeing how you think.
