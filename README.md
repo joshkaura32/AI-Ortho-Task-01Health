@@ -38,8 +38,7 @@ Two properties are load-bearing:
 
 1. **Teeth are rigid.** You output per-tooth rigid transforms - never deformed geometry.
 2. **The text must matter.** The same mouth under a different instruction must produce a
-   materially, *correctly* different plan. A model that ignores the text has failed the
-   task regardless of its geometric accuracy - and the evaluation is built to expose this.
+   materially, *correctly* different plan.
 
 **Building or training a neural model is optional.** Any approach that produces plans is in
 bounds: learned, geometric, LLM-in-the-loop, hybrid. Public datasets and pretrained weights
@@ -106,7 +105,7 @@ that noise is part of the task.
 
 ## 3. The instructions
 
-Free text, varying along four deliberate axes. You don't need to parse them into this
+Free text, varying along three deliberate axes. You don't need to parse them into this
 taxonomy - but your *outputs* must respond to these axes, because the gold plans do:
 
 1. **Protection** - teeth that must not move ("do not move 1.6, 2.6", "avoid moving the
@@ -114,7 +113,6 @@ taxonomy - but your *outputs* must respond to these axes, because the gold plans
 2. **Scope** - which arch/region the work applies to ("lower arch only" ⇒ every upper
    tooth stays put; "front teeth" ⇒ incisors + canines).
 3. **Objective trade-off** - speed ↔ safety ↔ aesthetics.
-4. **Structure** - refinements, stage budgets (only relevant to the staging extension).
 
 Example, same style as the pack: *"Align and level the lower arch only; leave the upper
 arch completely untouched. Resolve crowding primarily by proclination rather than IPR."*
@@ -151,7 +149,8 @@ time: `python starter/score.py --plans <dir> --split train` (train cases carry t
 the scorer is the same metric code we run).
 
 If the core is done and you have appetite, two open extensions: **staging** (decompose
-movements into clinically-sized per-stage steps, collision-free at every stage) and
+movements into clinically-sized per-stage steps, collision-free at every stage - the
+stage budgets and refinements some instructions mention matter only here) and
 **multi-plan** (2–3 distinct valid plans for the same case and instruction). Unfinished
 extensions cost nothing.
 
