@@ -167,7 +167,9 @@ One thing is required - **your writeup**. Plan files are suggested, and code is 
    - What do your shuffle-control numbers show - and how much of your sensitivity comes
      from explicit parsing/rules versus learned behaviour, if both are present?
    - What further data could be introduced to make a model perform better and why?
-   - If given unlimited time and budget, what would you build differently and why?
+   - **Your proposed architecture** - the deepest part of the submission: given unlimited
+     time, budget and richer data, what would you build and why? What changes from your
+     prototype, what stays, and what alternatives did you weigh?
 
    These are prompts, not a template. Anything you found interesting belongs here too -
    ideas you didn't have time to build, alternatives you weighed and rejected, dead ends
