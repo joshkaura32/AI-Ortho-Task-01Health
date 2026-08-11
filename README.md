@@ -40,12 +40,13 @@ Two properties are load-bearing:
 2. **The text must matter.** The same mouth under a different instruction must produce a
    materially, *correctly* different plan.
 
-**Building or training a neural model is optional.** Any approach that produces plans is in
-bounds: learned, geometric, LLM-in-the-loop, hybrid. Public datasets and pretrained weights
-are allowed if documented; ortho-specific commercial tools are not. Babysitting training
-runs buys nothing here - we are hiring for how you think about **3D + text multimodal
-modeling**, and the deepest part of your submission is the *proposed architecture* in your
-writeup, which may go well beyond whatever you had time to prototype.
+**This task is deliberately open-ended - solve it however you like.** There is no expected
+approach and no hidden rubric of techniques: learned, geometric, LLM-in-the-loop, hybrid,
+or something we haven't thought of are all welcome. Public datasets and pretrained weights are allowed if documented;
+ortho-specific commercial tools are not. Babysitting training runs buys nothing here - we are hiring for how you think about
+**multimodal modelling: 3D geometry, clinical language, and the numeric records that
+surround them** - and the deepest part of your submission is the *proposed architecture*
+in your writeup, which may go well beyond whatever you had time to prototype.
 
 ## 2. The data
 
@@ -159,9 +160,7 @@ extensions cost nothing.
 
 One thing is required - **your writeup**. Plan files are suggested, and code is optional.
 
-1. **The writeup (required)** - no required format or length: most good ones end up
-   somewhere around 2–4 pages, but write what the thinking needs. These are the questions
-   we'll be reading for:
+1. **The writeup (required)** - no required format or length, but write what the thinking needs. These are the questions we'll be reading for:
    - Describe your model architecture and why you chose it.
    - How does your prototype turn (geometry, text) into plans - and how does the text
      actually steer the output?
@@ -169,6 +168,10 @@ One thing is required - **your writeup**. Plan files are suggested, and code is 
      from explicit parsing/rules versus learned behaviour, if both are present?
    - What further data could be introduced to make a model perform better and why?
    - If given unlimited time and budget, what would you build differently and why?
+
+   These are prompts, not a template. Anything you found interesting belongs here too -
+   ideas you didn't have time to build, alternatives you weighed and rejected, dead ends
+   that taught you something. We would rather read your thinking than a report.
 
 2. **`plans/` (suggested)** - plan JSON for the 25 eval cases × every listed instruction
    (`starter/example_predict.py` emits the exact format). Not required, but well worth
