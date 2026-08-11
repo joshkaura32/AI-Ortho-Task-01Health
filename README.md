@@ -31,7 +31,7 @@ with a clinician always approving the output.
 Your task is a scoped slice of it. Build a model or pipeline:
 
 ```
-predict(arch_geometry, instruction_text) → per-tooth rigid movements
+predict(case_geometry, instruction_text) → per-tooth rigid movements
 ```
 
 Two properties are load-bearing:
@@ -49,8 +49,9 @@ writeup, which may go well beyond whatever you had time to prototype.
 
 ## 2. The data
 
-Anonymised, downsampled derivatives of real cases (do not redistribute; delete after the
-process).
+Anonymised, downsampled derivatives of real cases. Please do not redistribute or make
+public any of the data in `train/` or `eval/` - it stays between you and us - and delete
+your copy when the process ends.
 
 ```
 train/  (50 cases)   geometry + the real dentist instruction + the designer's real plan
@@ -67,7 +68,7 @@ Per case:
 | `teeth.json` | per tooth: `centroid` [x,y,z] and `frame_q` [x,y,z,w] - the local coordinate frame, provided so you don't spend budget on geometry preprocessing |
 | `instruction.txt` | (train) the real dentist's free-text request |
 | `gold_transforms.json` | (train) the designer's real plan: `{"transforms": {"<fdi>": {"t_mm": [3], "q": [4]}}}` |
-| `instructions.json` | (eval) `[{"id": "i0", "text": "..."}, ...]` - the eval battery; one plan per entry if you send plans |
+| `instructions.json` | (eval) `[{"id": "i0", "text": "..."}, ...]` - that case's instruction set; one plan per entry if you send plans |
 | `meta.json` | case id, arch type, complexity band |
 
 And the starter kit - five flat Python files, numpy-only:

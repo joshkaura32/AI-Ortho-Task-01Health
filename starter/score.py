@@ -4,8 +4,8 @@ From the pack root:
     python starter/score.py --plans submissions/mine --split train
 
 Train cases carry their gold (gold_transforms.json), so split=train is your dev loop.
-Eval gold is withheld — emit plans for every (case, instruction) in eval/ and submit;
-we run this same scorer (metrics.py is the judge's code) against the hidden gold.
+Eval gold is withheld — if you send plans (suggested), emit one per (case, instruction)
+in eval/; we score them with this same metrics.py against the hidden gold.
 """
 
 import argparse
